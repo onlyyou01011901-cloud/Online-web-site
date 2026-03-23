@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="tk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="html,css,js">
+    <meta name="description" content="online web site">
+    <meta name="author" content="han_trol">
+    <meta http-equiv="refresh" content="">
+    <title>Sahra Yoly</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Montserrat:wght@300;400;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --gold: #d4af37;
+            --dark: #0a0a0b;
+            --glass: rgba(255, 255, 255, 0.03);
+            --blue-glow: #00d2ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            background: radial-gradient(circle at top right, #1a1a2e, #0a0a0b);
+            min-height: 100vh;
+        }
+
+        /* --- BAŞLIK VE GİRİŞ --- */
+        header {
+            height: 40vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+        }
+
+        .logo {
+            font-family: 'Syncopate', sans-serif;
+            font-size: clamp(2rem, 8vw, 4rem);
+            letter-spacing: 15px;
+            background: linear-gradient(to right, #fff, var(--gold), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: tracking-in-expand 3.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+        }
+
+        .sub-logo {
+            font-size: 1rem;
+            letter-spacing: 5px;
+            color: var(--gold);
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+
+        /* --- ÜRÜN IZGARASI --- */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        @media (min-width: 992px) {
+            .product-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* --- ÜRÜN KARTI (EFSANE STİL) --- */
+        .card {
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.5s ease;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-15px) scale(1.02);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--gold);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .card img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 20px;
+            cursor: zoom-in;
+            transition: 0.5s;
+        }
+
+        .card:hover img {
+            filter: brightness(1.1);
+        }
+
+        .info {
+            padding: 15px 5px;
+            text-align: center;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        /* --- BUTONLAR --- */
+        .btns {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .imo-btn {
+            background: linear-gradient(45deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 200% 200%;
+            animation: gradientMove 5s infinite;
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .pay-btn {
+            background: transparent;
+            color: #555;
+            border: 1px solid #333;
+            padding: 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+
+        /* --- SEPET (FLOATING) --- */
+        .efsane-sebet {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+            cursor: pointer;
+            z-index: 1000;
+            transition: 0.3s;
+        }
+
+        .efsane-sebet:hover {
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        /* --- ZOOM MODAL --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal img {
+            max-width: 95%;
+            max-height: 85vh;
+            border-radius: 15px;
+            border: 2px solid var(--gold);
+        }
+
+        /* --- ANİMASYONLAR --- */
+        @keyframes tracking-in-expand {
+            0% {
+                letter-spacing: -0.5em;
+                opacity: 0;
+            }
+
+            40% {
+                opacity: 0.6;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 110px;
+            /* Sepet butonunun üstünde durması için */
+            right: 30px;
+            background: var(--glass);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: none;
+            /* Başta gizli */
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 999;
+            transition: 0.3s;
+        }
+
+        .back-to-top:hover {
+            background: var(--gold);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="efsane-sebet" onclick="alert('Ulgam ulgam gysga wagtyn icinde tayar bolar!')">🛒</div>
+
+    <header>
+        <div class="logo">SAHRA YOLY</div>
+        <div class="sub-logo">YGTYBARLY-YNAMLY!<BR>AMATLY-ELYETER!<BR>ONLINE SOWDA ULGAMY.</div>
+    </header>
+
+    <div class="container">
+        <div id="sahra-container" class="product-grid"></div>
+    </div>
+
+    <div id="imageModal" class="modal" onclick="this.style.display='none'">
+        <img id="fullImg">
+    </div>
+    <div id="backTop" class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</div>
+    <script>
+        // ÜRÜN VERİLERİ (Burası senin dükkanın!)
+        const urunler = [
+            { id: 1, img: "images/Futbolka/IMG_20260322_121552.jpg", fiyat: "70" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_121609.jpg", fiyat: "62" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_121627.jpg", fiyat: "95" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_122529.jpg", fiyat: "114" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_122548.jpg", fiyat: "71" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_122606.jpg", fiyat: "38.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_122623.jpg", fiyat: "38.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_122642.jpg", fiyat: "82" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_122657.jpg", fiyat: "74.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_122714.jpg", fiyat: "53.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_122748.jpg", fiyat: "78" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_122802.jpg", fiyat: "50.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_122817.jpg", fiyat: "89" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_122838.jpg", fiyat: "82" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_122855.jpg", fiyat: "61" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_122906.jpg", fiyat: "41.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_122923.jpg", fiyat: "74" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_122934.jpg", fiyat: "75" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_122954.jpg", fiyat: "78" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123004.jpg", fiyat: "46.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123017.jpg", fiyat: "64" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123123.jpg", fiyat: "81.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123137.jpg", fiyat: "64.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123149.jpg", fiyat: "112.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123200.jpg", fiyat: "61" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123211.jpg", fiyat: "62" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123222.jpg", fiyat: "121.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123237.jpg", fiyat: "149" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123250.jpg", fiyat: "41" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123302.jpg", fiyat: "61" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123315.jpg", fiyat: "115.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123325.jpg", fiyat: "44" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123348.jpg", fiyat: "45.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123402.jpg", fiyat: "159.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123422.jpg", fiyat: "82" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123442.jpg", fiyat: "63.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123457.jpg", fiyat: "61" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123507.jpg", fiyat: "54" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123627.jpg", fiyat: "61.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123640.jpg", fiyat: "74" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123652.jpg", fiyat: "35" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123727.jpg", fiyat: "41" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123743.jpg", fiyat: "57" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_123755.jpg", fiyat: "61.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_130809.jpg", fiyat: "33" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_130822.jpg", fiyat: "41" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_130839.jpg", fiyat: "70" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_130851.jpg", fiyat: "41" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_130940.jpg", fiyat: "50" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_130950.jpg", fiyat: "66" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131006.jpg", fiyat: "82" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131019.jpg", fiyat: "102.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131039.jpg", fiyat: "102.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131052.jpg", fiyat: "99" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131108.jpg", fiyat: "109.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131123.jpg", fiyat: "110.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131138.jpg", fiyat: "103" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131155.jpg", fiyat: "69.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131205.jpg", fiyat: "103" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131219.jpg", fiyat: "99" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131257.jpg", fiyat: "94.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131311.jpg", fiyat: "109" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131322.jpg", fiyat: "57.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131332.jpg", fiyat: "46.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131345.jpg", fiyat: "75" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131355.jpg", fiyat: "21" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131406.jpg", fiyat: "66.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131419.jpg", fiyat: "82" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131506.jpg", fiyat: "49" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131517.jpg", fiyat: "115" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131531.jpg", fiyat: "58.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131542.jpg", fiyat: "46.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131552.jpg", fiyat: "73" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131603.jpg", fiyat: "95" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131621.jpg", fiyat: "74" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131634.jpg", fiyat: "72" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131644.jpg", fiyat: "99" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131654.jpg", fiyat: "111" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131705.jpg", fiyat: "39" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131719.jpg", fiyat: "53.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131731.jpg", fiyat: "53" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131747.jpg", fiyat: "64.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131757.jpg", fiyat: "65.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131806.jpg", fiyat: "78" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131817.jpg", fiyat: "20.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131841.jpg", fiyat: "70" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131901.jpg", fiyat: "65" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131911.jpg", fiyat: "52" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131923.jpg", fiyat: "65.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131933.jpg", fiyat: "108.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131943.jpg", fiyat: "82" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_131952.jpg", fiyat: "82.5" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_132001.jpg", fiyat: "99" },
+            { id: 1, img: "images/Futbolka/IMG_20260322_132011.jpg", fiyat: "78" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_205936.jpg", fiyat: "119" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_205949.jpg", fiyat: "82.5" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210009.jpg", fiyat: "83" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210025.jpg", fiyat: "103" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210052.jpg", fiyat: "99.5" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210103.jpg", fiyat: "90" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210112.jpg", fiyat: "41" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210122.jpg", fiyat: "91" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210131.jpg", fiyat: "119.5" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210143.jpg", fiyat: "114" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210151.jpg", fiyat: "103" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210200.jpg", fiyat: "120" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210219.jpg", fiyat: "74.5" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210227.jpg", fiyat: "115" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210236.jpg", fiyat: "136" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210245.jpg", fiyat: "140" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210254.jpg", fiyat: "73.5" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210303.jpg", fiyat: "107" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210317.jpg", fiyat: "103" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210406.jpg", fiyat: "62" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210416.jpg", fiyat: "82" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210447.jpg", fiyat: "95.5" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210455.jpg", fiyat: "119" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210504.jpg", fiyat: "90.5" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210513.jpg", fiyat: "65.5" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210522.jpg", fiyat: "107" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210530.jpg", fiyat: "108" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210538.jpg", fiyat: "103" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210546.jpg", fiyat: "112" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210555.jpg", fiyat: "112" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210603.jpg", fiyat: "79" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210611.jpg", fiyat: "94.5" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210621.jpg", fiyat: "98.5" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210638.jpg", fiyat: "103" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210651.jpg", fiyat: "118.5" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210703.jpg", fiyat: "124" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210713.jpg", fiyat: "124" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210723.jpg", fiyat: "103" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210733.jpg", fiyat: "94.5" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210742.jpg", fiyat: "148.5" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210750.jpg", fiyat: "99" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210758.jpg", fiyat: "100" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210807.jpg", fiyat: "82.5" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210821.jpg", fiyat: "65.5" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210831.jpg", fiyat: "86.5" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210840.jpg", fiyat: "189.5" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210848.jpg", fiyat: "132" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210857.jpg", fiyat: "124" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210906.jpg", fiyat: "94.5" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210914.jpg", fiyat: "98" },
+            { id: 1, img: "images/Balak/Kesilen/IMG_20260322_210924.jpg", fiyat: "82.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_005706.jpg", fiyat: "103" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_005716.jpg", fiyat: "140.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_005731.jpg", fiyat: "81.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_005748.jpg", fiyat: "66" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_005759.jpg", fiyat: "119.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_005810.jpg", fiyat: "117.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_005819.jpg", fiyat: "165" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_005829.jpg", fiyat: "87" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_005839.jpg", fiyat: "84" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_005848.jpg", fiyat: "124" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_005859.jpg", fiyat: "83" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_005938.jpg", fiyat: "119.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_005949.jpg", fiyat: "117.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_005958.jpg", fiyat: "82.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010008.jpg", fiyat: "72" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010018.jpg", fiyat: "114" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010028.jpg", fiyat: "74" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010038.jpg", fiyat: "121" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010046.jpg", fiyat: "74" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010055.jpg", fiyat: "78.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010109.jpg", fiyat: "70.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010120.jpg", fiyat: "111" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010129.jpg", fiyat: "123.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010140.jpg", fiyat: "164.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010150.jpg", fiyat: "124" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010158.jpg", fiyat: "103" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010208.jpg", fiyat: "82" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010217.jpg", fiyat: "118" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010226.jpg", fiyat: "124" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010235.jpg", fiyat: "164.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010245.jpg", fiyat: "117" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010256.jpg", fiyat: "136" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010306.jpg", fiyat: "124" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010317.jpg", fiyat: "132.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010328.jpg", fiyat: "107" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010353.jpg", fiyat: "112" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010404.jpg", fiyat: "86.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010413.jpg", fiyat: "75" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010422.jpg", fiyat: "115.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010432.jpg", fiyat: "102.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010441.jpg", fiyat: "64" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010450.jpg", fiyat: "104" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010500.jpg", fiyat: "96.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010508.jpg", fiyat: "78" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010518.jpg", fiyat: "117.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010528.jpg", fiyat: "70.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010611.jpg", fiyat: "99" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010623.jpg", fiyat: "124" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010633.jpg", fiyat: "119.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010710.jpg", fiyat: "109.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010725.jpg", fiyat: "79.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010736.jpg", fiyat: "79.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010746.jpg", fiyat: "155" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010755.jpg", fiyat: "117" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010803.jpg", fiyat: "73" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010811.jpg", fiyat: "117" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010821.jpg", fiyat: "132.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010830.jpg", fiyat: "136" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010840.jpg", fiyat: "124" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010849.jpg", fiyat: "111.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010858.jpg", fiyat: "157.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010906.jpg", fiyat: "124" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010914.jpg", fiyat: "144.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010923.jpg", fiyat: "165" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010937.jpg", fiyat: "124" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010947.jpg", fiyat: "148" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_010956.jpg", fiyat: "99.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011004.jpg", fiyat: "164.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011043.jpg", fiyat: "58" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011105.jpg", fiyat: "107" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011114.jpg", fiyat: "144.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011125.jpg", fiyat: "124" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011134.jpg", fiyat: "43" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011143.jpg", fiyat: "124" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011229.jpg", fiyat: "124" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011239.jpg", fiyat: "162" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011255.jpg", fiyat: "132.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011307.jpg", fiyat: "111.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011319.jpg", fiyat: "111.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011401.jpg", fiyat: "39.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011411.jpg", fiyat: "115.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011427.jpg", fiyat: "112" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011440.jpg", fiyat: "82.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011455.jpg", fiyat: "124" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011507.jpg", fiyat: "130" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011516.jpg", fiyat: "124" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011525.jpg", fiyat: "42.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011535.jpg", fiyat: "123" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011544.jpg", fiyat: "123" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011643.jpg", fiyat: "123.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011700.jpg", fiyat: "117" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011711.jpg", fiyat: "78" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011727.jpg", fiyat: "101.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011737.jpg", fiyat: "144.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011746.jpg", fiyat: "144.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011755.jpg", fiyat: "103" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011810.jpg", fiyat: "124" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011830.jpg", fiyat: "140.5" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_011844.jpg", fiyat: "124" },
+            { id: 1, img: "images/Krasowka/Kesilen/IMG_20260323_012105.jpg", fiyat: "82" },
+        ];
+        //otomatik id sayilari;
+        urunler.forEach((item, index) => { item.id = index + 1; })
+
+
+        const container = document.getElementById('sahra-container');
+        const myImo = "+99361345418";
+
+        // Ürünleri Sayfaya Yerleştir
+        urunler.forEach(u => {
+            container.innerHTML += `
+                <div class="card">
+                    <img src="${u.img}" loading="lazy" onclick="event.stopPropagation(); zoom('${u.img}')">
+                    <div class="info">
+                        <div class="price">${u.fiyat} TMT</div>
+                        <div class="btns">
+                            <a href="imo://chat?phone=${myImo}&text=Salam! Men şu harydy sargyt etmek isleýärin (ID:${u.id})" class="imo-btn">
+                                IMO-DA SARGYT ET
+                            </a>
+                            <button class="pay-btn" onclick="alert('Töleg ulgamy yakynda açylar!')">KART BILEN TÖLEG</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        // Resim Büyütme
+        function zoom(src) {
+            const modal = document.getElementById('imageModal');
+            const img = document.getElementById('fullImg');
+            modal.style.display = 'flex';
+            img.src = src;
+        }
+        window.onscroll = function () {
+            if (document.documentElement.scrollTop > 500) {
+                document.getElementById("backTop").style.display = "flex";
+            } else {
+                document.getElementById("backTop").style.display = "none";
+            }
+        };
+    </script>
+</body>
+
+</html>
